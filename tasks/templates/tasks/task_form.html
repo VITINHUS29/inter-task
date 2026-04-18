@@ -1,0 +1,224 @@
+{% extends 'tasks/base.html' %}
+
+{% block content %}
+<style>
+    .page-header {
+        margin-bottom: 32px;
+    }
+    
+    .page-header h2 {
+        font-size: 24px;
+        color: var(--text-main);
+        margin-bottom: 8px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+    
+    .page-header p {
+        color: var(--text-muted);
+        font-size: 14px;
+    }
+
+    .create-task-container {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 24px;
+        align-items: start;
+    }
+
+    .form-card {
+        background: var(--bg-surface);
+        padding: 32px;
+        border-radius: 16px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-main);
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 14px 16px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 14px;
+        color: var(--text-main);
+        background: #F9FAFB;
+        transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--orange-primary);
+        background: #FFFFFF;
+        box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.15);
+    }
+
+    textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .btn-outline {
+        padding: 10px 20px;
+        border: 1px solid var(--border-color);
+        background: transparent;
+        color: var(--text-main);
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+    }
+
+    .btn-outline:hover {
+        background: #F3F4F6;
+    }
+
+    .info-card {
+        background: linear-gradient(135deg, var(--orange-primary), #E56E00);
+        padding: 32px;
+        border-radius: 16px;
+        color: white;
+        box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2);
+    }
+
+    .info-card h3 {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 18px;
+        margin-bottom: 24px;
+        font-weight: 600;
+    }
+
+    .info-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .info-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .info-list i {
+        font-size: 24px;
+        opacity: 0.9;
+    }
+    
+    .info-list strong {
+        font-size: 15px;
+        display: block;
+        margin-bottom: 2px;
+    }
+</style>
+
+<div class="page-header">
+    <h2>Criar Nova Tarefa</h2>
+    <p>Preencha os detalhes abaixo para adicionar uma nova demanda ao seu painel.</p>
+</div>
+
+<div class="create-task-container">
+    
+    <div class="form-card">
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="id_title">Título da Tarefa</label>
+                <input type="text" id="id_title" name="title" class="form-control" placeholder="Ex: Revisar relatório financeiro mensal" required>
+            </div>
+
+            <div class="form-group">
+                <label for="id_category">Categoria</label>
+                <select id="id_category" name="category" class="form-control">
+                    <option value="">Sem categoria</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.id }}">{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="id_due_date">Data de Entrega</label>
+                <input type="date" id="id_due_date" name="due_date" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="id_description">Descrição</label>
+                <textarea id="id_description" name="description" class="form-control" placeholder="Adicione links, detalhes ou instruções para esta tarefa..." required></textarea>
+            </div>
+
+            <div class="form-actions">
+                <a href="{% url 'tasks' %}" class="btn-outline">Cancelar</a>
+                <button type="submit" class="btn-primary" style="border: none;">
+                    <i class="ph ph-check-circle"></i> Salvar Tarefa
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="info-card">
+        <h3><i class="ph ph-lightbulb"></i> Dicas de Organização</h3>
+        <ul class="info-list">
+            <li>
+                <i class="ph ph-target"></i>
+                <div>
+                    <strong>Seja Específico</strong>
+                    Títulos claros ajudam você a entender a demanda rapidamente no seu dashboard.
+                </div>
+            </li>
+            <li>
+                <i class="ph ph-tag"></i>
+                <div>
+                    <strong>Use as Categorias</strong>
+                    Categorizar suas tarefas facilita a filtragem e a organização da sua rotina na tela principal.
+                </div>
+            </li>
+            <li>
+                <i class="ph ph-calendar-check"></i>
+                <div>
+                    <strong>Defina Prazos</strong>
+                    Ao colocar uma data, sua tarefa aparecerá automaticamente no calendário para facilitar sua visualização semanal.
+                </div>
+            </li>
+            <li>
+                <i class="ph ph-clock"></i>
+                <div>
+                    <strong>Regra dos 2 Minutos</strong>
+                    Se a tarefa levar menos de 2 minutos para ser feita, faça agora mesmo ao invés de cadastrá-la no sistema!
+                </div>
+            </li>
+        </ul>
+    </div>
+
+</div>
+{% endblock %}

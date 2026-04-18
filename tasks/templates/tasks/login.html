@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InterTasks - Login Premium</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        :root {
+            --orange-primary: #FF7A00;
+            --orange-hover: #E56E00;
+            --bg-body: #F3F4F6;
+            --bg-surface: #FFFFFF;
+            --text-main: #111827;
+            --text-muted: #6B7280;
+            --border-color: #E5E7EB;
+            --scan-color: var(--orange-primary);
+            --scan-glow: rgba(255, 122, 0, 0.5);
+            --scan-success: #10B981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-body);
+            overflow: hidden;
+        }
+
+        #security-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(2, 6, 23, 0.95);
+            backdrop-filter: blur(8px);
+            display: none; 
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .scanner-container {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .scanner-icon-wrapper {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 24px;
+            border: 2px solid rgba(255, 122, 0, 0.3);
+            border-radius: 24px;
+            background: rgba(255, 122, 0, 0.05);
+            box-shadow: 0 0 30px rgba(255, 122, 0, 0.15);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        #scan-icon {
+            font-size: 80px;
+            color: var(--scan-color);
+            opacity: 0.9;
+            filter: drop-shadow(0 0 8px var(--scan-color));
+        }
+
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--scan-color);
+            box-shadow: 0 0 20px 8px var(--scan-glow);
+            animation: scan-animation 1.5s infinite ease-in-out alternate;
+        }
+
+        @keyframes scan-animation {
+            0% { top: -10%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 110%; opacity: 0; }
+        }
+
+        .scan-title {
+            font-family: 'JetBrains Mono', monospace; 
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--scan-color);
+            margin-bottom: 8px;
+            text-shadow: 0 0 15px var(--scan-glow);
+        }
+
+        .scan-subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: #94a3b8;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .scanner-container.success .scanner-icon-wrapper {
+            border-color: var(--scan-success);
+            background: rgba(16, 185, 129, 0.15);
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.4);
+            transform: scale(1.05);
+        }
+
+        .scanner-container.success #scan-icon {
+            color: var(--scan-success);
+            filter: drop-shadow(0 0 12px var(--scan-success));
+        }
+
+        .scanner-container.success .scan-line {
+            display: none; 
+        }
+
+        .scanner-container.success .scan-title {
+            color: var(--scan-success);
+            text-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+        }
+
+        .login-wrapper {
+            display: flex;
+            width: 100%;
+            max-width: 1000px;
+            min-height: 600px;
+            background: var(--bg-surface);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin: 20px;
+        }
+
+        .brand-panel {
+            flex: 1;
+            background: linear-gradient(135deg, var(--orange-primary) 0%, #D96500 100%);
+            padding: 48px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .form-panel {
+            flex: 1;
+            padding: 64px 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-header h2 { font-size: 28px; margin-bottom: 8px; }
+        .form-header p { color: var(--text-muted); margin-bottom: 32px; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: #F9FAFB;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: var(--orange-primary);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+
+        .btn-submit:hover { background: var(--orange-hover); }
+
+        .form-footer { margin-top: 30px; text-align: center; font-size: 14px; }
+        .form-footer a { color: var(--orange-primary); font-weight: 600; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <div id="security-overlay">
+        <div class="scanner-container" id="scanner-container">
+            <div class="scanner-icon-wrapper">
+                <i class="ph ph-fingerprint" id="scan-icon"></i>
+                <div class="scan-line" id="scan-line"></div>
+            </div>
+            <h3 class="scan-title" id="scan-title">ESCANEANDO...</h3>
+            <p class="scan-subtitle" id="scan-subtitle">Verificando credenciais de segurança</p>
+        </div>
+    </div>
+
+    <div class="login-wrapper">
+        <div class="brand-panel">
+            <div class="brand-logo">
+                <i class="ph-fill ph-check-circle"></i>
+                InterTasks
+            </div>
+            <div class="brand-content">
+                <h2>Bem-vindo de volta!</h2>
+                <p>Sua produtividade começa aqui. Acesse suas tarefas e organize seu dia.</p>
+            </div>
+            <div style="opacity: 0.5; font-size: 12px;">© 2024 InterTasks Pro</div>
+        </div>
+
+        <div class="form-panel">
+            <div class="form-header">
+                <h2>Login</h2>
+                <p>Insira seus dados para continuar.</p>
+            </div>
+
+            <form method="POST" id="loginForm">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Usuário</label>
+                    <input type="text" name="username" placeholder="Seu usuário" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" name="password" placeholder="Sua senha" required>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    Entrar no Sistema
+                    <i class="ph ph-arrow-right"></i>
+                </button>
+            </form>
+
+            <div class="form-footer">
+                Não tem conta? <a href="{% url 'register' %}">Cadastre-se</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            // Trava o envio na hora para fazer a animação
+            e.preventDefault(); 
+            
+            const form = this;
+            const overlay = document.getElementById('security-overlay');
+            const container = document.getElementById('scanner-container');
+            const icon = document.getElementById('scan-icon');
+            const title = document.getElementById('scan-title');
+            const subtitle = document.getElementById('scan-subtitle');
+            
+            // 1. Abre a tela preta com o Scanner ligando (agora Laranja)
+            overlay.style.display = 'flex';
+            
+            // 2. Após 2.5 segundos escaneando, dá o "Acesso Permitido"
+            setTimeout(function() {
+                // Adiciona a classe de sucesso que muda as cores para verde forte
+                container.classList.add('success');
+                
+                // Troca a digital por um ícone de "check" preenchido
+                icon.classList.remove('ph-fingerprint', 'ph');
+                icon.classList.add('ph-check-circle', 'ph-fill');
+                
+                // Altera os textos
+                title.innerText = 'ACESSO PERMITIDO';
+                subtitle.innerText = 'Redirecionando para o painel de controle...';
+                
+                // 3. Aguarda mais 1.2 segundos para a pessoa ler e aí entra no Django
+                setTimeout(function() {
+                    form.submit();
+                }, 1200);
+                
+            }, 2500); 
+        });
+    </script>
+</body>
+</html>

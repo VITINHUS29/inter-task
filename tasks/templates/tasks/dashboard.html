@@ -1,0 +1,268 @@
+{% extends 'tasks/base.html' %}
+
+{% block content %}
+<style>
+    .dashboard-container {
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 24px;
+        margin-bottom: 32px;
+    }
+
+    .stat-card {
+        background: var(--bg-surface);
+        padding: 24px;
+        border-radius: 20px;
+        border: 1px solid var(--border-color);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.05);
+        border-color: var(--orange-primary);
+    }
+
+    .stat-card::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,122,0,0.03) 0%, transparent 70%);
+        opacity: 0;
+        transition: 0.3s;
+    }
+
+    .stat-card:hover::after {
+        opacity: 1;
+    }
+
+    .stat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .stat-title {
+        color: var(--text-muted);
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+
+    .stat-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: var(--orange-light);
+        color: var(--orange-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+    }
+
+    .stat-value {
+        font-size: 36px;
+        font-weight: 800;
+        color: var(--text-main);
+        margin-bottom: 8px;
+        letter-spacing: -1px;
+    }
+
+    .stat-footer {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: var(--text-muted);
+    }
+
+    .trend-up { color: #10B981; font-weight: 700; display: flex; align-items: center; gap: 4px; }
+    .trend-neutral { color: var(--orange-primary); font-weight: 700; }
+
+    .dashboard-lower-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 24px;
+    }
+
+    .panel {
+        background: var(--bg-surface);
+        border-radius: 24px;
+        border: 1px solid var(--border-color);
+        padding: 24px;
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+    .panel-title {
+        font-size: 18px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .chart-bar {
+        flex: 1;
+        background: var(--orange-light);
+        border-radius: 6px 6px 0 0;
+        transition: all 0.5s;
+        position: relative;
+    }
+
+    .chart-bar:hover {
+        background: var(--orange-primary);
+    }
+
+    .chart-bar::before {
+        content: attr(data-value);
+        position: absolute;
+        top: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 11px;
+        font-weight: 700;
+        opacity: 0;
+    }
+
+    .chart-bar:hover::before { opacity: 1; }
+
+    .activity-item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 12px 0;
+        border-bottom: 1px solid #F3F4F6;
+    }
+
+    .activity-item:last-child { border: none; }
+
+    .activity-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #F3F4F6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+
+    .activity-info p { font-size: 14px; font-weight: 600; }
+    .activity-info span { font-size: 12px; color: var(--text-muted); }
+
+</style>
+
+<div class="dashboard-container">
+    
+    <div class="dashboard-grid">
+        <div class="stat-card">
+            <div class="stat-header">
+                <span class="stat-title">Tasks Ativas</span>
+                <div class="stat-icon"><i class="ph-fill ph-stack"></i></div>
+            </div>
+            <div class="stat-value">{{ request.user.task_set.count }}</div>
+            <div class="stat-footer">
+                <span class="trend-neutral">Consolidado</span>
+                <span>no banco de dados</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <span class="stat-title">Score de Foco</span>
+                <div class="stat-icon"><i class="ph-fill ph-lightning"></i></div>
+            </div>
+            <div class="stat-value">94%</div>
+            <div class="stat-footer">
+                <span class="trend-up"><i class="ph ph-trend-up"></i> +12%</span>
+                <span>esta semana</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <span class="stat-title">Infraestrutura</span>
+                <div class="stat-icon" style="background: #D1FAE5; color: #10B981;"><i class="ph-fill ph-cloud-check"></i></div>
+            </div>
+            <div class="stat-value" style="font-size: 28px; margin-top: 10px;">Operacional</div>
+            <div class="stat-footer">
+                <span class="trend-up">Latência 24ms</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-lower-grid">
+        
+        <div class="panel">
+            <div class="panel-header">
+                <h3 class="panel-title"><i class="ph ph-chart-bar" style="color: var(--orange-primary);"></i> Volume de Produção</h3>
+                <select style="border: none; background: #F3F4F6; padding: 5px 10px; border-radius: 8px; font-size: 12px; font-weight: 600;">
+                    <option>Últimos 7 dias</option>
+                </select>
+            </div>
+            <div class="activity-chart">
+                <div class="chart-bar" style="height: 40%;" data-value="12"></div>
+                <div class="chart-bar" style="height: 70%;" data-value="18"></div>
+                <div class="chart-bar" style="height: 50%;" data-value="14"></div>
+                <div class="chart-bar" style="height: 90%;" data-value="24"></div>
+                <div class="chart-bar" style="height: 65%;" data-value="17"></div>
+                <div class="chart-bar" style="height: 85%;" data-value="22"></div>
+                <div class="chart-bar" style="height: 100%; background: var(--orange-primary);" data-value="28"></div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <h3 class="panel-title"><i class="ph ph-clock-counter-clockwise" style="color: var(--orange-primary);"></i> Atividade</h3>
+            </div>
+            <div class="activity-list">
+                <div class="activity-item">
+                    <div class="activity-icon"><i class="ph ph-plus" style="color: #10B981;"></i></div>
+                    <div class="activity-info">
+                        <p>Nova task criada</p>
+                        <span>Há 2 minutos</span>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon"><i class="ph ph-check" style="color: var(--orange-primary);"></i></div>
+                    <div class="activity-info">
+                        <p>Projeto Finalizado</p>
+                        <span>Há 45 minutos</span>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon"><i class="ph ph-user" style="color: #6366F1;"></i></div>
+                    <div class="activity-info">
+                        <p>Login detectado</p>
+                        <span>Há 2 horas</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InterTasks - Cadastro</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        :root {
+            --orange-primary: #FF7A00;
+            --orange-hover: #E56E00;
+            --bg-body: #F3F4F6;
+            --bg-surface: #FFFFFF;
+            --text-main: #111827;
+            --text-muted: #6B7280;
+            --border-color: #E5E7EB;
+            --danger: #EF4444;
+            --success: #10B981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-body);
+            color: var(--text-main);
+            -webkit-font-smoothing: antialiased;
+            overflow: hidden;
+        }
+
+        .register-wrapper {
+            display: flex;
+            width: 100%;
+            max-width: 1000px;
+            min-height: 600px;
+            background: var(--bg-surface);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin: 20px;
+        }
+
+        color: white;
+        display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-content h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .brand-content p {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            line-height: 1.5;
+        }
+
+        .step-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            position: relative;
+        }
+
+        .step-list::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 10px;
+            bottom: 10px;
+            width: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            z-index: 1;
+        }
+
+        .step-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            font-size: 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-icon {
+            width: 32px;
+            height: 32px;
+            background: white;
+            color: var(--orange-primary);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 0 0 6px var(--orange-primary);
+            flex-shrink: 0;
+        }
+
+        .step-text h4 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .step-text p {
+            font-size: 14px;
+            opacity: 0.8;
+            margin: 0;
+        }
+
+
+        .form-panel {
+            flex: 1;
+            padding: 64px 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: var(--bg-surface);
+        }
+
+        .form-header {
+            margin-bottom: 32px;
+        }
+
+        .form-header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .form-header p {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        .error-message {
+            background: #FEF2F2;
+            color: var(--danger);
+            padding: 12px 16px;
+            border-radius: 8px;
+            border-left: 4px solid var(--danger);
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: #F9FAFB;
+            color: var(--text-main);
+            font-size: 15px;
+            transition: all 0.2s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--orange-primary);
+            background: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.15);
+        }
+
+        .btn-submit {
+            width: 100%;
+            margin-top: 12px;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: var(--text-main);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-submit:hover {
+            background: #000000;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-footer {
+            margin-top: 32px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .form-footer a {
+            color: var(--orange-primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .form-footer a:hover {
+            color: var(--orange-hover);
+            text-decoration: underline;
+        }
+
+        .toast-notification {
+            position: fixed;
+            top: 24px;
+            right: -400px;
+            background: white;
+            border-left: 4px solid var(--success);
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .toast-notification.show {
+            right: 24px;
+        }
+
+        .toast-icon {
+            color: var(--success);
+            font-size: 24px;
+        }
+
+        .toast-content h4 {
+            color: var(--text-main);
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .toast-content p {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .toast-icon.success {
+            animation: none !important;
+            color: var(--success);
+        }
+
+        @media (max-width: 768px) {
+            .register-wrapper {
+                flex-direction: column;
+            }
+            .brand-panel { padding: 32px; }
+            .form-panel { padding: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="toast-notification" id="successToast">
+    <i class="ph-fill ph-circle-notch toast-icon" id="toastIcon" style="animation: spin 1s linear infinite;"></i>
+    <div class="toast-content">
+        <h4 id="toastTitle">PROCESSANDO...</h4>
+        <p id="toastMessage">A sua conta está sendo criada...</p>
+    </div>
+</div>
+
+<div class="register-wrapper">
+
+    <div class="brand-panel">
+        <div class="brand-logo">
+            <i class="ph-fill ph-rocket-launch"></i>
+            InterTasks
+        </div>
+
+        <div class="brand-content">
+            <h2>Dê o primeiro passo.</h2>
+            <p>Junte-se a milhares de profissionais que já otimizaram as suas rotinas com a nossa plataforma.</p>
+            
+            <ul class="step-list">
+                <li>
+                    <div class="step-icon">1</div>
+                    <div class="step-text">
+                        <h4>Crie a sua conta</h4>
+                        <p>Leva menos de um minuto.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="step-icon">2</div>
+                    <div class="step-text">
+                        <h4>Organize o seu painel</h4>
+                        <p>Crie categorias e adicione tarefas.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="step-icon">3</div>
+                    <div class="step-text">
+                        <h4>Acompanhe o sucesso</h4>
+                        <p>Monitore a sua produtividade diária.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="form-panel">
+        <div class="form-header">
+            <h2>Criar Conta</h2>
+            <p>Preencha os dados abaixo para começar.</p>
+        </div>
+
+        {% if error %}
+            <div class="error-message">
+                <i class="ph-fill ph-warning-circle"></i>
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <form method="POST" id="registerForm">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="username">Escolha um Usuário</label>
+                <input type="text" id="username" name="username" placeholder="Ex: joaosilva" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Crie uma Senha</label>
+                <input type="password" id="password" name="password" placeholder="Mínimo 8 caracteres" required>
+            </div>
+
+            <button type="submit" class="btn-submit">
+                Finalizar Cadastro
+                <i class="ph ph-check"></i>
+            </button>
+        </form>
+
+        <div class="form-footer">
+            Já possui uma conta? <a href="{% url 'login' %}">Fazer login agora</a>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.getElementById('registerForm').addEventListener('submit', function() {
+        var toast = document.getElementById('successToast');
+        var btn = document.querySelector('.btn-submit');
+        
+        // Mostra a notificação de carregamento
+        toast.classList.add('show');
+        
+        // Desabilita o botão para o usuário não clicar duas vezes
+        btn.innerHTML = 'Salvando no banco... <i class="ph-fill ph-circle-notch" style="animation: spin 1s linear infinite;"></i>';
+        btn.style.pointerEvents = 'none';
+        btn.style.opacity = '1.5';
+
+        // O formulário será enviado instantaneamente para o Django!
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InterTasks - Professional SaaS</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        :root {
+            --orange-primary: #FF7A00;
+            --orange-hover: #E56E00;
+            --orange-light: #FFF4EC;
+            --bg-body: #F9FAFB;
+            --bg-surface: #FFFFFF;
+            --text-main: #111827;
+            --text-muted: #6B7280;
+            --border-color: #E5E7EB;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            display: flex;
+            background: var(--bg-body);
+            color: var(--text-main);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            background: var(--bg-surface);
+            border-right: 1px solid var(--border-color);
+            padding: 24px 16px;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 12px;
+            margin-bottom: 40px;
+        }
+
+        .brand i {
+            font-size: 28px;
+            color: var(--orange-primary);
+        }
+
+        .brand h2 {
+            color: var(--text-main);
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex-grow: 1;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar a i {
+            font-size: 20px;
+        }
+
+        .sidebar a:hover {
+            background: var(--bg-body);
+            color: var(--text-main);
+        }
+
+        .sidebar a.active {
+            background: var(--orange-light);
+            color: var(--orange-primary);
+            font-weight: 600;
+        }
+        
+        .sidebar a.active i {
+            color: var(--orange-primary);
+            font-weight: bold;
+        }
+
+        .logout {
+            margin-top: auto;
+            color: #EF4444 !important;
+        }
+        
+        .logout:hover {
+            background: #FEF2F2 !important;
+        }
+
+        .main {
+            margin-left: 260px;
+            padding: 32px 48px;
+            width: calc(100% - 260px);
+            min-height: 100vh;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .topbar-title h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .topbar-title p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .btn-primary {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--orange-primary);
+            border: none;
+            padding: 10px 20px;
+            color: #FFFFFF;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary:hover {
+            background: var(--orange-hover);
+            transform: translateY(-1px);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-left: 24px;
+            border-left: 1px solid var(--border-color);
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--text-main);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="brand">
+        <i class="ph-fill ph-check-circle"></i>
+        <h2>InterTasks</h2>
+    </div>
+
+    <div class="nav-links">
+        <a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+            <i class="ph ph-squares-four"></i>
+            Dashboard
+        </a>
+
+        <a href="{% url 'tasks' %}" class="{% if request.resolver_match.url_name == 'tasks' %}active{% endif %}">
+            <i class="ph ph-list-checks"></i>
+            Minhas Tasks
+        </a>
+
+        <a href="{% url 'kanban' %}" class="{% if request.resolver_match.url_name == 'kanban' %}active{% endif %}">
+            <i class="ph ph-kanban"></i>
+            Quadro Kanban
+        </a>
+        </div>
+
+    <a href="{% url 'logout' %}" class="logout">
+        <i class="ph ph-sign-out"></i>
+        Sair da conta
+    </a>
+</div>
+
+<div class="main">
+    <div class="topbar">
+        <div class="topbar-title">
+            <h1>
+                {% if request.resolver_match.url_name == 'dashboard' %}Visão Geral
+                {% elif request.resolver_match.url_name == 'tasks' %}Minhas Tarefas
+                {% elif request.resolver_match.url_name == 'kanban' %}Fluxo de Trabalho
+                {% endif %}
+            </h1>
+            <p>Olá, {{ request.user.username }}! Gerencie sua produtividade.</p>
+        </div>
+
+        <div class="topbar-actions">
+            <a href="{% url 'task_create' %}" class="btn-primary">
+                <i class="ph ph-plus"></i>
+                Nova Task
+            </a>
+            
+            <div class="user-profile">
+                <div class="avatar">
+                    {{ request.user.username|slice:":1" }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block content %}
+    {% endblock %}
+</div>
+
+</body>
+</html>

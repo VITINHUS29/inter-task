@@ -1,0 +1,180 @@
+{% extends 'tasks/base.html' %}
+
+{% block content %}
+<style>
+    .kanban-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        padding: 20px 0;
+        align-items: start;
+    }
+
+    .kanban-column {
+        background: #F4F5F7;
+        border-radius: 12px;
+        padding: 16px;
+        min-height: 80vh;
+        border: 1px solid var(--border-color);
+    }
+
+    .column-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .column-header h3 {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--text-main);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .task-count {
+        background: #E2E4E9;
+        color: #5E6C84;
+        padding: 2px 8px;
+        border-radius: 10px;
+        font-size: 12px;
+    }
+
+    .kanban-card {
+        background: white;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 12px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        border: 1px solid transparent;
+        transition: transform 0.2s ease;
+    }
+
+    .kanban-card:hover {
+        transform: translateY(-2px);
+        border-color: var(--orange-primary);
+    }
+
+    .card-category {
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: var(--orange-primary);
+        margin-bottom: 8px;
+    }
+
+    .card-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-main);
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid #F4F5F7;
+    }
+
+    .due-date {
+        font-size: 11px;
+        color: #6B778C;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .btn-status {
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background 0.2s;
+    }
+
+    .btn-todo { background: #EBECF0; color: #42526E; }
+    .btn-doing { background: #DEEBFF; color: #0052CC; }
+    .btn-done { background: #E3FCEF; color: #006644; }
+
+    .todo-border { border-top: 4px solid #DFE1E6; }
+    .doing-border { border-top: 4px solid #0052CC; }
+    .done-border { border-top: 4px solid #00875A; }
+</style>
+
+<div class="page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <div>
+        <h2 style="font-size: 24px; font-weight: 700;">Quadro Kanban</h2>
+        <p style="color: var(--text-muted);">Gerencie o progresso das suas tarefas visualmente.</p>
+    </div>
+    <a href="{% url 'task_create' %}" class="btn-primary" style="text-decoration: none;">
+        <i class="ph ph-plus"></i> Nova Tarefa
+    </a>
+</div>
+
+<div class="kanban-container">
+
+    <div class="kanban-column">
+        <div class="column-header">
+            <h3 style="border-bottom: 3px solid #6B778C;">A Fazer</h3>
+        </div>
+        
+        {% for task in tasks %}
+            {% if task.status == 'todo' %}
+            <div class="kanban-card todo-border">
+                <div class="card-category">{{ task.category.name|default:"Geral" }}</div>
+                <span class="card-title">{{ task.title }}</span>
+                <div class="card-footer">
+                    <span class="due-date"><i class="ph ph-calendar"></i> {{ task.due_date|date:"d/m"|default:"S/D" }}</span>
+                    <a href="{% url 'change_status' task.id 'doing' %}" class="btn-status btn-doing">Iniciar ▶</a>
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="kanban-column">
+        <div class="column-header">
+            <h3 style="border-bottom: 3px solid #0052CC;">Em Processamento</h3>
+        </div>
+
+        {% for task in tasks %}
+            {% if task.status == 'doing' %}
+            <div class="kanban-card doing-border">
+                <div class="card-category">{{ task.category.name|default:"Geral" }}</div>
+                <span class="card-title">{{ task.title }}</span>
+                <div class="card-footer">
+                    <span class="due-date"><i class="ph ph-calendar"></i> {{ task.due_date|date:"d/m"|default:"S/D" }}</span>
+                    <a href="{% url 'change_status' task.id 'done' %}" class="btn-status btn-done">Concluir ✔</a>
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="kanban-column">
+        <div class="column-header">
+            <h3 style="border-bottom: 3px solid #00875A;">Finalizadas</h3>
+        </div>
+
+        {% for task in tasks %}
+            {% if task.status == 'done' %}
+            <div class="kanban-card done-border" style="opacity: 0.8;">
+                <div class="card-category">{{ task.category.name|default:"Geral" }}</div>
+                <span class="card-title" style="text-decoration: line-through; color: #6B778C;">{{ task.title }}</span>
+                <div class="card-footer">
+                    <span class="due-date"><i class="ph ph-check-circle"></i> Concluído</span>
+                    <a href="{% url 'change_status' task.id 'todo' %}" class="btn-status btn-todo">Reiniciar ↺</a>
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,416 @@
+{% extends 'tasks/base.html' %}
+
+{% block content %}
+<style>
+    .settings-wrapper {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 32px;
+        align-items: start;
+        margin-top: 10px;
+    }
+
+
+    .settings-nav-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        color: var(--text-muted);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        border-radius: 10px;
+        transition: all 0.2s ease;
+        margin-bottom: 4px;
+    }
+
+    .settings-nav-item i {
+        font-size: 20px;
+    }
+
+    .settings-nav-item:hover {
+        background: #F9FAFB;
+        color: var(--text-main);
+    }
+
+    .settings-nav-item.active {
+        background: rgba(255, 122, 0, 0.08);
+        color: var(--orange-primary);
+    }
+
+    .settings-content {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .settings-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 32px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    }
+
+    .card-header {
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .card-header h3 {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 4px;
+    }
+
+    .card-header p {
+        font-size: 14px;
+        color: var(--text-muted);
+    }
+
+    .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 32px;
+    }
+
+    .avatar-wrapper {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        overflow: hidden;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(255, 122, 0, 0.2);
+    }
+
+    .avatar-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .avatar-overlay {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .avatar-wrapper:hover .avatar-overlay {
+        opacity: 1;
+    }
+
+    .completion-bar-container {
+        flex: 1;
+    }
+
+    .completion-text {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--text-main);
+    }
+
+    .progress-bar-bg {
+        width: 100%;
+        height: 8px;
+        background: var(--border-color);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--orange-primary), #FF9D42);
+        width: 85%;
+        border-radius: 10px;
+        transition: width 1s ease-in-out;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .form-group label {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .form-control {
+        padding: 12px 16px;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        background: #F9FAFB;
+        font-size: 15px;
+        color: var(--text-main);
+        transition: 0.3s;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--orange-primary);
+        background: white;
+        box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.15);
+    }
+
+    .toggle-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .toggle-row:last-child {
+        border-bottom: none;
+    }
+
+    .toggle-info h4 {
+        font-size: 15px;
+        color: var(--text-main);
+        margin-bottom: 4px;
+    }
+
+    .toggle-info p {
+        font-size: 13px;
+        color: var(--text-muted);
+    }
+
+    .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
+    }
+
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-color: #D1D5DB;
+        transition: .3s;
+        border-radius: 24px;
+    }
+
+    .toggle-slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: .3s;
+        border-radius: 50%;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .toggle-switch input:checked + .toggle-slider {
+        background-color: var(--orange-primary);
+    }
+
+    .toggle-switch input:checked + .toggle-slider:before {
+        transform: translateX(20px);
+    }
+
+    .danger-zone {
+        border: 1px solid #FECACA;
+        background: #FEF2F2;
+    }
+
+    .danger-zone .card-header h3 {
+        color: #DC2626;
+    }
+
+    .btn-danger {
+        background: #EF4444;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .btn-danger:hover { background: #DC2626; }
+    
+    .btn-save {
+        background: var(--text-main);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s;
+        margin-top: 24px;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+    .btn-save:hover { background: black; }
+
+</style>
+
+<div class="page-header" style="margin-bottom: 24px;">
+    <h2 style="font-size: 24px; color: var(--text-main); font-weight: 700;">Configurações</h2>
+    <p style="color: var(--text-muted); font-size: 14px;">Gerencie suas informações pessoais e preferências do sistema.</p>
+</div>
+
+<div class="settings-wrapper">
+
+    <div class="settings-nav">
+        <a href="#" class="settings-nav-item active">
+            <i class="ph ph-user-circle"></i> Meu Perfil
+        </a>
+        <a href="#" class="settings-nav-item">
+            <i class="ph ph-bell-ringing"></i> Notificações
+        </a>
+        <a href="#" class="settings-nav-item">
+            <i class="ph ph-shield-check"></i> Segurança
+        </a>
+        <a href="#" class="settings-nav-item">
+            <i class="ph ph-credit-card"></i> Faturamento
+        </a>
+    </div>
+
+    <div class="settings-content">
+
+        <div class="settings-card">
+            <div class="profile-header">
+                <div class="avatar-wrapper">
+                    <img src="https://ui-avatars.com/api/?name={{ request.user.username }}&background=FF7A00&color=fff&size=100" alt="Avatar">
+                    <div class="avatar-overlay">
+                        <i class="ph ph-camera" style="font-size: 24px;"></i>
+                    </div>
+                </div>
+
+                <div class="completion-bar-container">
+                    <div class="completion-text">
+                        <span>Perfil Completo</span>
+                        <span style="color: var(--orange-primary);">85%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">Falta adicionar o seu número de telefone para alcançar 100%.</p>
+                </div>
+            </div>
+
+            <div class="card-header">
+                <h3>Informações Pessoais</h3>
+                <p>Atualize seus dados básicos para a plataforma.</p>
+            </div>
+
+            <form>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Nome Completo</label>
+                        <input type="text" class="form-control" value="Seu Nome Aqui">
+                    </div>
+                    <div class="form-group">
+                        <label>Nome de Usuário</label>
+                        <input type="text" class="form-control" value="{{ request.user.username }}" disabled style="opacity: 0.7; cursor: not-allowed;">
+                    </div>
+                    <div class="form-group">
+                        <label>Endereço de Email</label>
+                        <input type="email" class="form-control" placeholder="voce@exemplo.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Cargo / Profissão</label>
+                        <input type="text" class="form-control" placeholder="Ex: Desenvolvedor Senior">
+                    </div>
+                </div>
+                <button type="button" class="btn-save">
+                    <i class="ph ph-floppy-disk"></i> Salvar Alterações
+                </button>
+            </form>
+        </div>
+
+        <div class="settings-card">
+            <div class="card-header">
+                <h3>Preferências de Alertas</h3>
+                <p>Escolha como você quer ser avisado sobre as suas tarefas.</p>
+            </div>
+
+            <div class="toggle-row">
+                <div class="toggle-info">
+                    <h4>Resumo Diário por Email</h4>
+                    <p>Receba um email toda manhã com as tarefas do dia.</p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+
+            <div class="toggle-row">
+                <div class="toggle-info">
+                    <h4>Notificações no Navegador</h4>
+                    <p>Alertas pop-up quando uma tarefa estiver prestes a vencer.</p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <div class="toggle-row">
+                <div class="toggle-info">
+                    <h4>Modo Foco Automático</h4>
+                    <p>Desativar alertas visuais durante o horário de expediente.</p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="settings-card danger-zone">
+            <div class="card-header" style="border-bottom-color: #FECACA;">
+                <h3>Zona de Risco</h3>
+                <p style="color: #991B1B;">Ações permanentes na sua conta.</p>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h4 style="font-size: 15px; color: var(--text-main); margin-bottom: 4px;">Excluir Conta</h4>
+                    <p style="font-size: 13px; color: var(--text-muted);">Uma vez excluída, todos os seus dados e tarefas serão apagados para sempre.</p>
+                </div>
+                <button class="btn-danger">Excluir Minha Conta</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
