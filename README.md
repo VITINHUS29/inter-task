@@ -11,8 +11,7 @@ Sistema web de gerenciamento de tarefas desenvolvido com **Django + Django REST 
 ✅ CRUD completo de tarefas (Criar, listar, editar, excluir)  
 ✅ Organização por categorias  
 ✅ Visualização em lista, kanban e calendário  
-✅ API REST para integração externa  
-✅ Recuperação de senha (reset de senha)  
+✅ API REST para integração externa   
 ✅ Painel administrativo do Django  
 ✅ Interface moderna (estilo Inter)
 
