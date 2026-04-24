@@ -1,128 +1,129 @@
-# Inter Task
+# 🚀 Inter Task
 
-Sistema web de gerenciamento de tarefas desenvolvido com **Django + Django REST Framework**, com interface moderna inspirada no estilo do banco Inter.
-
----
-
-##  Funcionalidades
-
-✅ Cadastro e login de usuários  
-✅ Dashboard com visão geral das tarefas  
-✅ CRUD completo de tarefas (Criar, listar, editar, excluir)  
-✅ Organização por categorias  
-✅ Visualização em lista, kanban e calendário  
-✅ API REST para integração externa   
-✅ Painel administrativo do Django  
-✅ Interface moderna (estilo Inter)
+Sistema web desenvolvido para gerenciamento de tarefas, permitindo organização, controle e acompanhamento de atividades de forma simples e eficiente.
 
 ---
 
-##  Tecnologias utilizadas
+## 📖 Sobre o Projeto
+
+O **Inter Task** é uma aplicação web voltada para gerenciamento de tarefas (tasks), ideal para uso pessoal ou em equipe.  
+O sistema permite criar, visualizar, editar e remover tarefas, facilitando o controle do fluxo de trabalho.
+
+Este projeto foi desenvolvido utilizando boas práticas de desenvolvimento web, com foco em organização de código, escalabilidade e facilidade de uso.
+
+---
+
+## 🛠️ Tecnologias Utilizadas
 
 - Python 3.x
 - Django
-- Django REST Framework
-- SQLite
-- HTML5 + CSS3
-- JavaScript
+- SQLite (ou outro banco configurado)
+- HTML5
+- CSS3
+- JavaScript (opcional)
+- Bootstrap (opcional)
 
 ---
 
-##  Estrutura do Projeto
+## ⚙️ Funcionalidades
 
-
-inter-task/
-│
-├── manage.py
-├── requirements.txt
-├── .gitignore
-│
-├── taskmanager/ # Configurações do projeto
-│
-├── tasks/ # App principal
-│ ├── models.py
-│ ├── views.py
-│ ├── api_views.py
-│ ├── serializers.py
-│ ├── urls.py
-│ ├── api_urls.py
-│ │
-│ ├── templates/tasks/
-│ ├── static/tasks/
-│ └── migrations/
-│
-└── db.sqlite3
-
+- ✅ Cadastro de tarefas  
+- 📋 Listagem de tarefas  
+- ✏️ Edição de tarefas  
+- ❌ Exclusão de tarefas  
+- 🔍 Visualização detalhada  
+- 📅 Organização por status/data  
 
 ---
 
-##  Como rodar o projeto
-
-### 1. Clone o repositório
+## 📂 Estrutura do Projeto
 
 ```bash
+inter-task/
+│
+├── tasks/               # App principal (lógica de tarefas)
+├── templates/           # Arquivos HTML
+├── static/              # CSS, JS e imagens
+├── db.sqlite3           # Banco de dados
+├── manage.py            # Gerenciador do Django
+└── README.md
+🚀 Como Executar o Projeto
+🔧 Pré-requisitos
+
+Antes de começar, você precisa ter instalado:
+
+Python 3.x
+pip
+virtualenv (opcional, mas recomendado)
+📥 Clonar o repositório
 git clone https://github.com/VITINHUS29/inter-task.git
 cd inter-task
-2. Crie o ambiente virtual
+🧪 Criar ambiente virtual
 python -m venv venv
-3. Ative o ambiente virtual
-Windows:
+
+Ativar:
+
+Windows
+
 venv\Scripts\activate
-Linux/Mac:
+
+Linux/Mac
+
 source venv/bin/activate
-4. Instale as dependências
+📦 Instalar dependências
 pip install -r requirements.txt
-5. Rode as migrações
+
+Caso não exista o requirements.txt:
+
+pip install django
+🗄️ Aplicar migrações
 python manage.py makemigrations
 python manage.py migrate
-6. Crie um superusuário
-python manage.py createsuperuser
-7. Execute o servidor
+▶️ Rodar o servidor
 python manage.py runserver
-8. Acesse no navegador
+
+Acesse no navegador:
+
 http://127.0.0.1:8000/
- Acesso ao Admin
+👤 Acesso ao Admin (Opcional)
+
+Criar superusuário:
+
+python manage.py createsuperuser
+
+Acesse:
+
 http://127.0.0.1:8000/admin/
+🧠 Conceitos Aplicados
+Arquitetura MTV (Model-Template-View)
+CRUD completo
+Organização modular com Django Apps
+Separação de responsabilidades
+Boas práticas de versionamento com Git
+📌 Melhorias Futuras
+🔐 Sistema de autenticação de usuários
+📊 Dashboard com estatísticas
+🏷️ Filtros e categorias de tarefas
+🌐 API REST com Django REST Framework
+📱 Interface responsiva aprimorada
+🤝 Contribuição
 
-Use o superusuário criado.
+Contribuições são bem-vindas!
 
- API REST
-Endpoint principal:
-GET /api/tasks/
-Exemplo de retorno:
-[]
+Faça um fork do projeto
+Crie uma branch
+git checkout -b minha-feature
+Commit suas alterações
+git commit -m "feat: minha nova feature"
+Push para o repositório
+git push origin minha-feature
+Abra um Pull Request
+📄 Licença
 
-Você pode usar ferramentas como:
+Este projeto está sob a licença MIT.
 
-Postman
-Insomnia
-Thunder Client (VS Code)
-
- Interface
-
-O layout foi inspirado em interfaces modernas como:
-
-Dashboard limpo
-Cores minimalistas
-Botões intuitivos
-UX focado em produtividade
- Melhorias futuras
-Notificações em tempo real
-Upload de arquivos
-Compartilhamento de tarefas
-Deploy em produção
-Integração com apps mobile
- Licença
-
-Este projeto é livre para uso acadêmico e aprendizado.
-
- Autor
+👨‍💻 Autor
 
 Desenvolvido por Vitor
 
-GitHub:
- https://github.com/VITINHUS29
-
-⭐ Se curtir o projeto
-
-Deixa uma ⭐ no repositório pra ajudar!
+GitHub: https://github.com/VITINHUS29
